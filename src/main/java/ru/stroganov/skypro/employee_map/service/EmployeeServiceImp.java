@@ -10,7 +10,7 @@ import java.util.*;
 
 @Service
 public class EmployeeServiceImp implements EmployeeService {
-    Map<String, Employee> employees;
+    private Map<String, Employee> employees;
     int count;
 
     public EmployeeServiceImp() {
@@ -18,8 +18,12 @@ public class EmployeeServiceImp implements EmployeeService {
         count = 100;
     }
 
+    public Map<String, Employee> getEmployees() {
+        return employees;
+    }
+
     @Override
-    public Employee add(String firstName, String lastName) {
+    public Employee add(String firstName, String lastName,int department,int salary) {
         if (employees.size() > count) {
             throw new EmployeeStorageIsFullException("Коллекция переполнена");
         }
@@ -27,27 +31,27 @@ public class EmployeeServiceImp implements EmployeeService {
             throw new EmployeeAlreadyAddedException("Добавляемый сотрудник " +
                     "уже имеется в коллекции");
         }
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName,department,salary);
         employees.put(firstName + " " + lastName, employee);
         return employee;
     }
 
     @Override
-    public Employee remove(String firstName, String lastName) {
+    public Employee remove(String firstName, String lastName,int department,int salary) {
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Удаляемый сотрудник не найден");
         }
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName,department,salary);
         employees.remove(firstName+" "+lastName,employee);
         return employee;
     }
 
     @Override
-    public Employee find(String firstName, String lastName) {
+    public Employee find(String firstName, String lastName,int department,int salary) {
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName,department,salary);
         return employee;
     }
 
