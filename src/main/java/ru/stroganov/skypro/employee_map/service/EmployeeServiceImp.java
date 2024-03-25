@@ -1,0 +1,58 @@
+package ru.stroganov.skypro.employee_map.service;
+
+import org.springframework.stereotype.Service;
+import ru.stroganov.skypro.employee_map.exception.EmployeeAlreadyAddedException;
+import ru.stroganov.skypro.employee_map.exception.EmployeeNotFoundException;
+import ru.stroganov.skypro.employee_map.exception.EmployeeStorageIsFullException;
+import ru.stroganov.skypro.employee_map.model.Employee;
+
+import java.util.*;
+
+@Service
+public class EmployeeServiceImp implements EmployeeService {
+    Map<String, Employee> employees;
+    int count;
+
+    public EmployeeServiceImp() {
+        this.employees = new HashMap<>();
+        count = 100;
+    }
+
+    @Override
+    public Employee add(String firstName, String lastName) {
+        if (employees.size() > count) {
+            throw new EmployeeStorageIsFullException("Коллекция переполнена");
+        }
+        if (employees.containsKey(firstName + " " + lastName)) {
+            throw new EmployeeAlreadyAddedException("Добавляемый сотрудник " +
+                    "уже имеется в коллекции");
+        }
+        Employee employee = new Employee(firstName, lastName);
+        employees.put(firstName + " " + lastName, employee);
+        return employee;
+    }
+
+    @Override
+    public Employee remove(String firstName, String lastName) {
+        if (!employees.containsKey(firstName + " " + lastName)) {
+            throw new EmployeeNotFoundException("Удаляемый сотрудник не найден");
+        }
+        Employee employee = new Employee(firstName, lastName);
+        employees.remove(firstName+" "+lastName,employee);
+        return employee;
+    }
+
+    @Override
+    public Employee find(String firstName, String lastName) {
+        if (!employees.containsKey(firstName + " " + lastName)) {
+            throw new EmployeeNotFoundException("Сотрудник не найден");
+        }
+        Employee employee = new Employee(firstName, lastName);
+        return employee;
+    }
+
+    @Override
+    public List<Employee> getInfo() {
+        return new ArrayList<>(employees.values());
+    }
+}
