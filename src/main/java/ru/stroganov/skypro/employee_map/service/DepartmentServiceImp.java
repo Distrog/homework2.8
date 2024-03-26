@@ -11,37 +11,37 @@ import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImp implements DepartmentService {
-    Map<String, Employee> employees;
+    //    Map<String, Employee> employees;
+    EmployeeService employeeService;
 
     public DepartmentServiceImp(EmployeeService employeeService) {
-        this.employees = employeeService.getEmployees();
+        this.employeeService = employeeService;
     }
 
     @Override
     public Employee getEmployeeWithMaxSalary(int department) {
-        return employees.values().stream()
+        return employeeService.getEmployees().values().stream()
                 .filter(e -> e.getDepartment() == department)
                 .max(Comparator.comparing(e -> e.getSalary())).get();
     }
 
     @Override
     public Employee getEmployeeWithMinSalary(int department) {
-        return employees.values().stream()
+        return employeeService.getEmployees().values().stream()
                 .filter(e -> department == department)
                 .min(Comparator.comparing(e -> e.getSalary())).get();
     }
 
     @Override
     public List<Employee> getAllEmployeesFromDepartment(int department) {
-        return employees.values().stream()
+        return employeeService.getEmployees().values().stream()
                 .filter(e -> e.getDepartment() == department)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Employee> getAllEmployeesFromAllDepartments() {
-        return employees.values().stream()
-                .sorted(Comparator.comparing(e -> e.getDepartment()))
-                .collect(Collectors.toList());
+    public Map<Integer, List<Employee>> getAllEmployeesFromAllDepartments() {
+        return employeeService.getEmployees().values().stream()
+                .collect(Collectors.groupingBy(e -> e.getDepartment()));
     }
 }

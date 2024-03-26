@@ -8,6 +8,7 @@ import ru.stroganov.skypro.employee_map.model.Employee;
 import ru.stroganov.skypro.employee_map.service.DepartmentService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/departments")
@@ -29,11 +30,13 @@ public class DepartmentController {
     }
 
     @GetMapping("/all")
-    public List<Employee> getAllEmployeesFromDepartment
-            (@RequestParam(name = "departmentId", required = false) Integer departmentId) {
-        if (departmentId == null) {
-            return departmentService.getAllEmployeesFromAllDepartments();
-        }
+    public Map<Integer, List<Employee>> getAllEmployeesFromDepartment() {
+        return departmentService.getAllEmployeesFromAllDepartments();
+
+    }
+
+    @GetMapping(value = "/all", params = "departmentId")
+    public List<Employee> getAllEmployeesFromDepartment(@RequestParam(name = "departmentId") Integer departmentId) {
         return departmentService.getAllEmployeesFromDepartment(departmentId);
     }
 }
