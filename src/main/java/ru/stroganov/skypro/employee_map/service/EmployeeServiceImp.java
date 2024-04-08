@@ -5,6 +5,7 @@ import ru.stroganov.skypro.employee_map.exception.EmployeeAlreadyAddedException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeNotFoundException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeStorageIsFullException;
 import ru.stroganov.skypro.employee_map.model.Employee;
+import ru.stroganov.skypro.employee_map.string_checker.StringChecker;
 
 import java.util.*;
 
@@ -24,6 +25,8 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public Employee add(String firstName, String lastName, int department, int salary) {
+        firstName = StringChecker.check(firstName);
+        lastName = StringChecker.check(lastName);
         if (employees.size() > count) {
             throw new EmployeeStorageIsFullException("Коллекция переполнена");
         }
