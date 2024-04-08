@@ -12,12 +12,10 @@ import java.util.*;
 @Service
 public class EmployeeServiceImp implements EmployeeService {
     private Map<String, Employee> employees;
-    StringChecker stringChecker;
     int count;
 
     public EmployeeServiceImp() {
         this.employees = new HashMap<>();
-        this.stringChecker = new StringChecker();
         count = 100;
     }
 
@@ -27,8 +25,6 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public Employee add(String firstName, String lastName, int department, int salary) {
-        firstName = stringChecker.check(firstName);
-        lastName = stringChecker.check(lastName);
         if (employees.size() > count) {
             throw new EmployeeStorageIsFullException("Коллекция переполнена");
         }
