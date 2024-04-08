@@ -5,16 +5,19 @@ import ru.stroganov.skypro.employee_map.exception.EmployeeAlreadyAddedException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeNotFoundException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeStorageIsFullException;
 import ru.stroganov.skypro.employee_map.model.Employee;
+import ru.stroganov.skypro.employee_map.string_check.StringChecker;
 
 import java.util.*;
 
 @Service
 public class EmployeeServiceImp implements EmployeeService {
     private Map<String, Employee> employees;
+    StringChecker stringChecker;
     int count;
 
     public EmployeeServiceImp() {
         this.employees = new HashMap<>();
+        this.stringChecker = new StringChecker();
         count = 100;
     }
 
@@ -23,7 +26,9 @@ public class EmployeeServiceImp implements EmployeeService {
     }
 
     @Override
-    public Employee add(String firstName, String lastName,int department,int salary) {
+    public Employee add(String firstName, String lastName, int department, int salary) {
+        firstName = stringChecker.check(firstName);
+        lastName = stringChecker.check(lastName);
         if (employees.size() > count) {
             throw new EmployeeStorageIsFullException("Коллекция переполнена");
         }
@@ -31,27 +36,27 @@ public class EmployeeServiceImp implements EmployeeService {
             throw new EmployeeAlreadyAddedException("Добавляемый сотрудник " +
                     "уже имеется в коллекции");
         }
-        Employee employee = new Employee(firstName, lastName,department,salary);
+        Employee employee = new Employee(firstName, lastName, department, salary);
         employees.put(firstName + " " + lastName, employee);
         return employee;
     }
 
     @Override
-    public Employee remove(String firstName, String lastName,int department,int salary) {
+    public Employee remove(String firstName, String lastName, int department, int salary) {
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Удаляемый сотрудник не найден");
         }
-        Employee employee = new Employee(firstName, lastName,department,salary);
-        employees.remove(firstName+" "+lastName,employee);
+        Employee employee = new Employee(firstName, lastName, department, salary);
+        employees.remove(firstName + " " + lastName, employee);
         return employee;
     }
 
     @Override
-    public Employee find(String firstName, String lastName,int department,int salary) {
+    public Employee find(String firstName, String lastName, int department, int salary) {
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
-        Employee employee = new Employee(firstName, lastName,department,salary);
+        Employee employee = new Employee(firstName, lastName, department, salary);
         return employee;
     }
 
