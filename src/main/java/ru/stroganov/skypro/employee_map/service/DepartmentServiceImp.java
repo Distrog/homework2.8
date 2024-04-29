@@ -1,6 +1,7 @@
 package ru.stroganov.skypro.employee_map.service;
 
 import org.springframework.stereotype.Service;
+import ru.stroganov.skypro.employee_map.exception.DepartmentNotFoundException;
 import ru.stroganov.skypro.employee_map.model.Employee;
 
 
@@ -18,24 +19,43 @@ public class DepartmentServiceImp implements DepartmentService {
     }
 
     @Override
-    public Employee getEmployeeWithMaxSalary(int department) {
+    public List<Employee> getAllEmployeesFromDepartment(int departmentId) {
+        if (employeeService.getEmployees().values().stream().mapToInt(e -> e.getDepartment()).noneMatch(e -> e == departmentId)) {
+            throw new DepartmentNotFoundException();
+        }
         return employeeService.getEmployees().values().stream()
-                .filter(e -> e.getDepartment() == department)
-                .max(Comparator.comparing(e -> e.getSalary())).get();
-    }
-
-    @Override
-    public Employee getEmployeeWithMinSalary(int department) {
-        return employeeService.getEmployees().values().stream()
-                .filter(e -> department == department)
-                .min(Comparator.comparing(e -> e.getSalary())).get();
-    }
-
-    @Override
-    public List<Employee> getAllEmployeesFromDepartment(int department) {
-        return employeeService.getEmployees().values().stream()
-                .filter(e -> e.getDepartment() == department)
+                .filter(e -> e.getDepartment() == departmentId)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer getSumOfSalariesFromDepartment(int departmentId) {
+        if (employeeService.getEmployees().values().stream().mapToInt(e -> e.getDepartment()).noneMatch(e -> e == departmentId)) {
+            throw new DepartmentNotFoundException();
+        }
+        return employeeService.getEmployees().values().stream()
+                .filter(e -> e.getDepartment() == departmentId).
+                mapToInt(e -> e.getSalary()).sum();
+    }
+
+    @Override
+    public Integer getMaxSalaryFromDepartment(int departmentId) {
+        if (employeeService.getEmployees().values().stream().mapToInt(e -> e.getDepartment()).noneMatch(e -> e == departmentId)) {
+            throw new DepartmentNotFoundException();
+        }
+        return employeeService.getEmployees().values().stream()
+                .filter(e -> e.getDepartment() == departmentId)
+                .mapToInt(e -> e.getSalary()).max().getAsInt();
+    }
+
+    @Override
+    public Integer getMinSalaryFromDepartment(int departmentId) {
+        if (employeeService.getEmployees().values().stream().mapToInt(e -> e.getDepartment()).noneMatch(e -> e == departmentId)) {
+            throw new DepartmentNotFoundException();
+        }
+        return employeeService.getEmployees().values().stream()
+                .filter(e -> e.getDepartment() == departmentId)
+                .mapToInt(e -> e.getSalary()).min().getAsInt();
     }
 
     @Override
