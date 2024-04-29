@@ -41,6 +41,8 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public Employee remove(String firstName, String lastName, int department, int salary) {
+        firstName = StringChecker.check(firstName);
+        lastName = StringChecker.check(lastName);
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Удаляемый сотрудник не найден");
         }
@@ -51,6 +53,8 @@ public class EmployeeServiceImp implements EmployeeService {
 
     @Override
     public Employee find(String firstName, String lastName, int department, int salary) {
+        firstName = StringChecker.check(firstName);
+        lastName = StringChecker.check(lastName);
         if (!employees.containsKey(firstName + " " + lastName)) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
@@ -62,4 +66,5 @@ public class EmployeeServiceImp implements EmployeeService {
     public List<Employee> getInfo() {
         return new ArrayList<>(employees.values());
     }
+
 }

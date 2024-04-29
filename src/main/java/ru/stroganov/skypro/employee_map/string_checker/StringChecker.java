@@ -8,6 +8,6 @@ public class StringChecker {
         if (!StringUtils.isAlpha(s)) {
             throw new WrongStringFormatException("не верно заполнено строковое поле");
         }
-        return StringUtils.capitalize(s);
+        return StringUtils.capitalize(s.toLowerCase());
     }
 }
