@@ -5,6 +5,7 @@ import ru.stroganov.skypro.employee_map.exception.EmployeeAlreadyAddedException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeNotFoundException;
 import ru.stroganov.skypro.employee_map.exception.EmployeeStorageIsFullException;
 import ru.stroganov.skypro.employee_map.model.Employee;
+import ru.stroganov.skypro.employee_map.string_checker.StringChecker;
 
 
 import java.util.*;

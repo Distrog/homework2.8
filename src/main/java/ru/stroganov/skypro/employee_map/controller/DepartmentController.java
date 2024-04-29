@@ -1,9 +1,6 @@
 package ru.stroganov.skypro.employee_map.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.stroganov.skypro.employee_map.model.Employee;
 import ru.stroganov.skypro.employee_map.service.DepartmentService;
 
@@ -11,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/departments")
+@RequestMapping("/department")
 public class DepartmentController {
     DepartmentService departmentService;
 
@@ -19,24 +16,30 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @GetMapping("/max-salary")
-    public Employee getEmployeeWithMaxSalary(@RequestParam("departmentId") Integer departmentId) {
-        return departmentService.getEmployeeWithMaxSalary(departmentId);
+    @GetMapping("/{id}/employees")
+    public List<Employee> getAllEmployeesFromDepartment(@PathVariable("id") Integer departmentId) {
+        return departmentService.getAllEmployeesFromDepartment(departmentId);
     }
 
-    @GetMapping("/min-salary")
-    public Employee getEmployeeWithMinSalary(@RequestParam("departmentId") Integer departmentId) {
-        return departmentService.getEmployeeWithMinSalary(departmentId);
+    @GetMapping("/{id}/salary/sum")
+    public Integer getSumOfSalariesFromDepartment(@PathVariable("id") Integer departmentId) {
+        return departmentService.getSumOfSalariesFromDepartment(departmentId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/{id}/salary/max")
+    public Integer getMaxSalaryFromDepartment(@PathVariable("id") Integer departmentId) {
+        return departmentService.getMaxSalaryFromDepartment(departmentId);
+    }
+
+    @GetMapping("/{id}/salary/min")
+    public Integer getMinSalaryFromDepartment(@PathVariable("id") Integer departmentId) {
+        return departmentService.getMinSalaryFromDepartment(departmentId);
+    }
+
+    @GetMapping("/employees")
     public Map<Integer, List<Employee>> getAllEmployeesFromAllDepartments() {
         return departmentService.getAllEmployeesFromAllDepartments();
 
     }
 
-    @GetMapping(value = "/all", params = "departmentId")
-    public List<Employee> getAllEmployeesFromDepartment(@RequestParam(name = "departmentId") Integer departmentId) {
-        return departmentService.getAllEmployeesFromDepartment(departmentId);
-    }
 }
